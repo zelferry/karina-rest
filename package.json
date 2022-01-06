@@ -2,17 +2,16 @@
   "name": "karina-rest",
   "version": "1.0.3",
   "description": "api",
-  "main": "index.js",
-  "private": true,
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.2",
-    "yiff_api": "^2.0.5"
+    "node-fetch": "^2.6.1"
   }
 }
