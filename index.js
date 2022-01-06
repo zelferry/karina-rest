@@ -9,6 +9,21 @@ function error(status, msg) {
   err.status = status;
   return err;
 }
+
+if (process.env.DYNO) {
+  app.enable('trust proxy')
+  app.use((req, res, next) => {
+    if (!req.secure) {
+      if (req.path === '/') {
+        res.redirect(301, `https://${req.host}/`)
+      } else {
+        res.status(400).end('Please switch to HTTPS.')
+      }
+    } else {
+      return next()
+    }
+  })
+}
 /*
 app.use('/api', function(req, res, next){
   var key = req.query['api-key'];
