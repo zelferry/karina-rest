@@ -61,6 +61,7 @@ app.get("/api/e6/:tags?", async(req, res, next)=>{
 })
 
 app.get("/ping", (req,res) => {
+    console.log(`[ ${Date.now()} ] ping recebido`)
     res.sendStatus(200)
 })
 
@@ -84,8 +85,9 @@ app.use(function(req, res){
 });
 
 app.listen(3000, () => {
-  console.log('server started');
+  console.log('servidor iniciado');
 });
 setInterval(() => {
+    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/ping`);
     http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
 }, 280000); 
