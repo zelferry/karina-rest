@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const http = require('http');
+
 
 const ops = { method: 'GET', headers: { 'User-Agent': 'crosdid/1.0' } };
 const fetch = require('node-fetch');
@@ -84,3 +86,6 @@ app.use(function(req, res){
 app.listen(3000, () => {
   console.log('server started');
 });
+setInterval(() => {
+    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+}, 280000); 
