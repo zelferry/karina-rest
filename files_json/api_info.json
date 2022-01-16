@@ -1,0 +1,15 @@
+{
+    "default_url": "???",
+    "actual_version": 1,
+    "routers": [
+        {
+            "name": "e621", 
+            "use":"<Url>/api/e6/:tags?",
+            "examples": [
+                "<Url>/api/e6?tags=bunny",
+                "<Url>/api/e6?tags=bunny+fox",
+                "<Url>/api/e6?tags=bunny+-fox"
+            ]
+        }
+    ]
+}

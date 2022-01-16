@@ -34,12 +34,32 @@ async function getposts(pos, limit, page) {
 		return vc.json()
 	}
 
+app.use("/api/nekos", require("./routers/nekos.js"))
+
+app.all("/", (req,res,next) => {
+    res.send({
+        error: "rota alterada para <Url>/api",
+        send: false,
+        status: "???"
+    });
+})
+
+
+app.get("/api", (req, res, next) => {
+    let json1 = JSON.stringify(require("./files_json/api_info.json"))
+    res.send(json1)
+})
+
 app.get("/api/e6/:tags?", async(req, res, next)=>{
     var pos = (req.query.tags).trim().split(/ +/g);
     //f (pos && !Array.isArray(pos)) pos = pos.split(' ');
- console.log(pos)
-    let json = await getposts(pos)
-    res.send(json)
+    console.log(pos)
+   /* let json = await getposts(pos)
+    res.send(json)*/
+})
+
+app.get("/ping", (req,res) => {
+    res.sendStatus(200)
 })
 
 app.use(function(err, req, res, next){
@@ -47,6 +67,7 @@ app.use(function(err, req, res, next){
     
   res.send({
       error: err.message,
+      send: false,
       status: (err.status || 500)
   });
 });
@@ -55,6 +76,7 @@ app.use(function(req, res){
   res.status(404);
   res.send({ 
       error: "Sorry, can't find that",
+      send: false,
       status: 404
   })
 });
