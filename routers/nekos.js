@@ -68,6 +68,7 @@ app1.get("/nsfw/:tag", async function(req, res){
             tags: datajson.nsfw
         })
     } else {
+        
         return res.send(await neko.nsfw[tags]())
     }
 })
