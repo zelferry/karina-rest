@@ -88,6 +88,6 @@ app.listen(3000, () => {
   console.log('servidor iniciado');
 });
 setInterval(() => {
-    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/ping`);
-    http.get(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
-}, 280000); 
+    fetch(`http://${process.env.PROJECT_DOMAIN}.glitch.me/ping`);
+    fetch(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
+}, 28000); 
