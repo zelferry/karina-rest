@@ -53,9 +53,9 @@ app.get("/api", (req, res, next) => {
 app.get("/api/e6/:tags?", async(req, res, next)=>{
     var pos = (req.query.tags).trim().split(/ +/g);
     //f (pos && !Array.isArray(pos)) pos = pos.split(' ');
-    console.log(pos)
-   /* let json = await getposts(pos)
-    res.send(json)*/
+    console.log(pos);
+    let json = await getposts(pos)
+    res.send(json)
 })
 
 app.get("/ping", (req,res) => {
