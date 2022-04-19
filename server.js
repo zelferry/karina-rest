@@ -1,20 +1,22 @@
-const express = require('express');
-const app = express();
-const http = require('http');
+let express = require('express');
+let app = express();
+let http = require('http');
+let bodyParser = require('body-parser')
 
+
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+app.use("/api/nekos", require("./routers/nekos.js"))
+ 
 
 const ops = { method: 'GET', headers: { 'User-Agent': 'crosdid/1.0' } };
 const fetch = require('node-fetch');
+
 let e6_config = {
 	pach: "https://e621.net/",
 	pach1:"https://e926.net/"
 };
-
-function error(status, msg) {
-  var err = new Error(msg);
-  err.status = status;
-  return err;
-}
 
 async function getposts(pos, limit, page) {
 		//if (pos && !Array.isArray(pos)) pos = pos.split(' ');
@@ -36,8 +38,6 @@ async function getposts(pos, limit, page) {
 		return vc.json()
 	}
 
-app.use("/api/nekos", require("./routers/nekos.js"))
-
 app.all("/", (req,res,next) => {
     res.send({
         error: "rota alterada para <Url>/api",
@@ -58,6 +58,14 @@ app.get("/api/e6/:tags?", async(req, res, next)=>{
     console.log(pos);
     let json = await getposts(pos)
     res.send(json)
+});
+
+app.post("/api/fetch/", async(req, res, next)=>{
+    var pos = req.body.urls//.trim().split(/ +/g);
+    //f (pos && !Array.isArray(pos)) pos = pos.split(' ');
+    console.log(pos);
+    //let json = await fetch(pos, ops);
+    res.send(".")
 })
 
 app.get("/ping", (req,res) => {

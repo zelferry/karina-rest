@@ -1,6 +1,6 @@
 {
     "default_url": "https://karina-rest.glitch.me",
-    "actual_version": 1,
+    "actual_version": 2,
     "routers": [
         {
             "name": "e621", 
