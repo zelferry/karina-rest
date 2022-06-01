@@ -1,0 +1,12 @@
+{
+    "base_url": "https://e621.net",
+    "endpoint": {
+        "posts": "/posts.json"
+    },
+    "fetch_data": {
+        "method": "GET",
+        "headers": {
+            "User-Agent": "crosdid/1.1 (in software testing phase)"
+        }
+    }
+}
