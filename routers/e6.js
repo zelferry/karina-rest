@@ -9,7 +9,7 @@ let maker_url = (pos, page, limit) => {
     let url = config.base_url;
     let base = config.endpoint.posts;
     
-    let body = `${pos ? `tags=${pos.join('+')}` : ''}`;
+    let body = `${pos ? `tags=${encodeURI(pos.join('+'))}` : ''}`;
     
     return `${url}${base ? `${base}?${body}` : base}`
 }
@@ -18,7 +18,7 @@ let request_url = (_tags) => {
     let base2
 
     if(process.env.REPLIT_ENVIRONMENT){
-        base2 = `${require("../config/client/endpoint_test.json")}/api/e6?tags=${_tags.join('+')}`
+        base2 = `${require("../config/client/endpoint_test.json")}/api/e6?tags=${encodeURI(_tags.join('+'))}`
     } else {
         base2 = maker_url(_tags)
     }
@@ -44,9 +44,42 @@ e6_app.post("/posts", async(req, res, next) => {
     });
 })
 
-e6_app.get("/static/file", async(req, res, next) => {
-    const url = 'https://static1.e621.net/data/3c/e9/3ce97aecf30e3cf4b2338457d53218be.jpg';
+e6_app.get("/image/:id", async(req, res, next) => {
+    let data = await fetch(request_url([`id:${req.params.id}`]), config.fetch_data)
 
+    let { posts } = await data.json();
+
+    let url_final
+
+    if(!posts.length) {
+        url_final = {
+            success: false,
+            status: "???",
+            message: "no post"
+        }
+    } else {
+        url_final = {
+            success: true,
+            status: 200,
+            message: "ok",
+            files: {
+                url: `https://${req.get('host')}/api/e621/static/file/${posts[0].id}`,
+                width: posts[0].file.width,
+                height: posts[0].file.height,
+                size: posts[0].file.size
+            }
+        }
+    }
+    
+    res.send(url_final)
+})
+
+e6_app.get("/static/file/:id", async(req, res, next) => {
+    let data = await fetch(request_url([`id:${req.params.id}`]), config.fetch_data);
+    let { posts } = await data.json();
+
+    let url = posts[0].file.url
+    //console.log(req.get('host'));
   request({
     url: url,
     encoding: null
