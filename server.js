@@ -8,7 +8,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 app.use("/api/nekos", require("./routers/nekos.js"));
-app.use("/api/e621", require("./routers/e6.js"))
+app.use("/api/e621", require("./routers/e6.js"));
  
 //routers/e6.js
 const ops = { method: 'GET', headers: { 'User-Agent': 'crosdid/1.0' } };
@@ -93,7 +93,23 @@ app.use(function(req, res){
   })
 });
 
-app.listen(80, () => {
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+    
+app.listen(normalizePort(process.env.PORT || '3002'), () => {
   console.log('servidor iniciado');
 });
 setInterval(() => {
