@@ -7,9 +7,10 @@ let bodyParser = require('body-parser')
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
-app.use("/api/nekos", require("./routers/nekos.js"))
+app.use("/api/nekos", require("./routers/nekos.js"));
+app.use("/api/e621", require("./routers/e6.js"))
  
-
+//routers/e6.js
 const ops = { method: 'GET', headers: { 'User-Agent': 'crosdid/1.0' } };
 const fetch = require('node-fetch');
 

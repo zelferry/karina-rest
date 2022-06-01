@@ -18,6 +18,7 @@
     "express": "^4.17.2",
     "http": "0.0.1-security",
     "nekos.life": "^2.0.9",
-    "node-fetch": "^2.6.1"
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2"
   }
 }
