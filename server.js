@@ -116,3 +116,5 @@ setInterval(() => {
     fetch(`http://${process.env.PROJECT_DOMAIN}.glitch.me/ping`);
     fetch(`http://${process.env.PROJECT_DOMAIN}.glitch.me/`);
 }, 28000); 
+
+module.exports = app;
