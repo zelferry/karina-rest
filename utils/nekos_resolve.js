@@ -4,15 +4,11 @@ class NekoClient1 {
     constructor(){
         let self = this
 
-        self.sfw = [];
-        self.nsfw = [];
+        self.tags = [];
 
-        Object.keys(data.sfw).forEach(async (endpoint) => {
-            self.sfw.push(endpoint)
-        })
-        Object.keys(data.nsfw).forEach(async (endpoint) => {
-            self.nsfw.push(endpoint)
-        })
+        Object.keys(data).forEach(async(endpoint) => {
+            self.tags.push(endpoint)
+        });
     }
 }
 module.exports = NekoClient1

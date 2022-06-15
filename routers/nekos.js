@@ -19,14 +19,14 @@ app1.get("/", function(req, res){
                     examples: [
                         "<Url>/api/nekos/sfw/meow"
                     ]
-                },
+                }/*
                 {
                     name: "nsfw",
                     usage: "<Url>/api/nekos/nsfw/:tag",
                     examples: [
                         "<Url>/api/nekos/nsfw/neko"
                     ]
-                }
+                }*/
             ]
         }
     })
@@ -41,18 +41,18 @@ app1.get("/sfw/:tag", async function(req, res){
             error: "não a tags",
             tags: datajson.sfw
         })
-    } else if(!(datajson.sfw).includes(tags)){
+    } else if(!(datajson.tags).includes(tags)){
         return res.send({
             send: false,
             error: "tag inválida",
-            tags: datajson.sfw
+            tags: datajson.tags
         })
     } else {
         return res.send(await neko.sfw[tags]())
     }
 });
 
-app1.get("/nsfw/:tag", async function(req, res){
+/*app1.get("/nsfw/:tag", async function(req, res){
     let tags = req.params.tag;
 
     if(!tags){
@@ -71,6 +71,6 @@ app1.get("/nsfw/:tag", async function(req, res){
         
         return res.send(await neko.nsfw[tags]())
     }
-})
+})*/
 
 module.exports = app1
