@@ -37,7 +37,7 @@ e6_app.post("/posts", async(req, res, next) => {
 
     let result = await fetch(url, config.fetch_data);
 
-    //console.log(await result.json())
+    console.log(await result)
     res.send({
         success: true,
         ...(await result.json())
@@ -45,8 +45,10 @@ e6_app.post("/posts", async(req, res, next) => {
 })
 
 e6_app.get("/image/:id", async(req, res, next) => {
-    let data = await fetch(request_url([`id:${req.params.id}`]), config.fetch_data)
-
+    let data = await fetch(request_url([`id:${req.params.id}`]), config.fetch_data);
+    console.log(data);
+    res.send(data)
+/*
     let { posts } = await data.json();
 
     let url_final
@@ -71,7 +73,7 @@ e6_app.get("/image/:id", async(req, res, next) => {
         }
     }
     
-    res.send(url_final)
+    res.send(url_final)*/
 })
 
 e6_app.get("/static/file/:id", async(req, res, next) => {
