@@ -14,18 +14,6 @@ let maker_url = (pos, page, limit) => {
     return `${url}${base ? `${base}?${body}` : base}`
 }
 
-let request_url = (_tags) => {
-    let base2
-
-    if(process.env.REPLIT_ENVIRONMENT){
-        base2 = `${require("../config/client/endpoint_test.json")}/api/e6?tags=${encodeURI(_tags.join('+'))}`
-    } else {
-        base2 = maker_url(_tags)
-    }
-
-    return base2
-}
-
 function auth(user, pass) {
     let buff = new Buffer.from(`${user}:${pass}`);
     let b64 = buff.toString('base64');
@@ -47,7 +35,7 @@ e6_app.post("/posts", async(req, res, next) => {
         page: req.body.page*/
     }
 
-    let url = request_url(_body.tags/*, _body.limit, _body.page*/);
+    let url = maker_url(_body.tags/*, _body.limit, _body.page*/);
 
     let result = await fetch(url, data9);
 
@@ -59,7 +47,7 @@ e6_app.post("/posts", async(req, res, next) => {
 })
 
 e6_app.get("/image/:id", async(req, res, next) => {
-    let data = await fetch(request_url([`id:${req.params.id}`]), data9);
+    let data = await fetch(maker_url([`id:${req.params.id}`]), data9);
     let { posts } = await data.json();
 
     let url_final
@@ -88,7 +76,7 @@ e6_app.get("/image/:id", async(req, res, next) => {
 })
 
 e6_app.get("/static/file/:id", async(req, res, next) => {
-    let data = await fetch(request_url([`id:${req.params.id}`]), data9);
+    let data = await fetch(maker_url([`id:${req.params.id}`]), data9);
     let { posts } = await data.json();
 
     let url = posts[0].file.url
