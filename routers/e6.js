@@ -2,7 +2,6 @@ let express = require('express');
 let fetch = require('node-fetch');
 let request = require('request');
 let config = require("../config/e621/data.json");
-
 let e6_app = express.Router();
 
 let maker_url = (pos, page, limit) => {
