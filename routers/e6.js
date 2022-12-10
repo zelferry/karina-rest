@@ -46,34 +46,8 @@ e6_app.post("/posts", async(req, res, next) => {
 
 e6_app.get("/image/:id", async(req, res, next) => {
     let data = await fetch(request_url([`id:${req.params.id}`]), config.fetch_data);
-    console.log(data);
-    res.send(data)
-/*
-    let { posts } = await data.json();
-
-    let url_final
-
-    if(!posts.length) {
-        url_final = {
-            success: false,
-            status: "???",
-            message: "no post"
-        }
-    } else {
-        url_final = {
-            success: true,
-            status: 200,
-            message: "ok",
-            files: {
-                url: `https://${req.get('host')}/api/e621/static/file/${posts[0].id}`,
-                width: posts[0].file.width,
-                height: posts[0].file.height,
-                size: posts[0].file.size
-            }
-        }
-    }
-    
-    res.send(url_final)*/
+    console.log(data.txt());
+    res.send(data.txt());
 })
 
 e6_app.get("/static/file/:id", async(req, res, next) => {
