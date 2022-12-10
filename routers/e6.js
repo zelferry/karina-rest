@@ -26,6 +26,20 @@ let request_url = (_tags) => {
     return base2
 }
 
+function auth(user, pass) {
+    let buff = new Buffer.from(`${user}:${pass}`);
+    let b64 = buff.toString('base64');
+    return `Basic ${b64}`;
+}
+
+let data9 = {
+    method: "GET",
+    headers: {
+        "User-Agent": "karinaTwo/4.0.2 (by jonny9075549t2)",
+        Authorization: auth(process.env.USER, process.env.PASS)
+    }
+}
+
 e6_app.post("/posts", async(req, res, next) => {
     let _body = {
         tags: req.body.tags/*.trim().split(/ +/g)/*,
@@ -35,7 +49,7 @@ e6_app.post("/posts", async(req, res, next) => {
 
     let url = request_url(_body.tags/*, _body.limit, _body.page*/);
 
-    let result = await fetch(url, config.fetch_data);
+    let result = await fetch(url, data9);
 
     console.log(await result)
     res.send({
@@ -45,13 +59,36 @@ e6_app.post("/posts", async(req, res, next) => {
 })
 
 e6_app.get("/image/:id", async(req, res, next) => {
-    let data = await fetch(request_url([`id:${req.params.id}`]), config.fetch_data);
-    console.log(data.txt());
-    res.send(data.txt());
+    let data = await fetch(request_url([`id:${req.params.id}`]), data9);
+    let { posts } = await data.json();
+
+    let url_final
+
+    if(!posts.length) {
+        url_final = {
+            success: false,
+            status: "???",
+            message: "no post"
+        }
+    } else {
+        url_final = {
+            success: true,
+            status: 200,
+            message: "ok",
+            files: {
+                url: `https://${req.get('host')}/api/e621/static/file/${posts[0].id}`,
+                width: posts[0].file.width,
+                height: posts[0].file.height,
+                size: posts[0].file.size
+            }
+        }
+    }
+    
+    res.send(url_final)
 })
 
 e6_app.get("/static/file/:id", async(req, res, next) => {
-    let data = await fetch(request_url([`id:${req.params.id}`]), config.fetch_data);
+    let data = await fetch(request_url([`id:${req.params.id}`]), data9);
     let { posts } = await data.json();
 
     let url = posts[0].file.url

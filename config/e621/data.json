@@ -2,11 +2,5 @@
     "base_url": "https://e621.net",
     "endpoint": {
         "posts": "/posts.json"
-    },
-    "fetch_data": {
-        "method": "GET",
-        "headers": {
-            "User-Agent": "karinaTwo/4.0.2 (jonny9075549t2)"
-        }
     }
 }
