@@ -19,7 +19,7 @@ function auth(user, pass) {
     return `Basic ${b64}`;
 }
 
-let data9 = {
+let header = {
     method: "GET",
     headers: {
         "User-Agent": "karinaTwo/4.0.2 (by jonny9075549t2)",
@@ -28,68 +28,88 @@ let data9 = {
 }
 
 e6_app.post("/posts", async(req, res, next) => {
-    let _body = {
-        tags: req.body.tags/*.trim().split(/ +/g)/*,
-        limit: req.body.limit,
-        page: req.body.page*/
+    let url = maker_url(req.body.tags);
+    let result = await fetch(url, header);
+    
+    let data
+    if(!result.ok){
+        data = {
+            ok: false,
+            status: result.status,
+            statusText: result.statusText,
+            data: {}
+        }
+    } else {
+        data = {
+            ok: true,
+            status: result.status,
+            statusText: result.statusText,
+            data: await result.json()
+        }
     }
-
-    let url = maker_url(_body.tags/*, _body.limit, _body.page*/);
-
-    let result = await fetch(url, data9);
-
-    console.log(await result)
-    res.send({
-        success: true,
-        ...(await result.json())
-    });
+    
+    res.send(data);
 })
 
 e6_app.get("/image/:id", async(req, res, next) => {
-    let data = await fetch(maker_url([`id:${req.params.id}`]), data9);
-    let { posts } = await data.json();
+    let result = await fetch(maker_url([`id:${req.params.id}`]), header);
 
-    let url_final
-
-    if(!posts.length) {
-        url_final = {
-            success: false,
-            status: "???",
-            message: "no post"
+    let data
+    if(!result.ok){
+        data = {
+            ok: false,
+            status: result.status,
+            statusText: result.statusText,
+            data: {}
         }
     } else {
-        url_final = {
-            success: true,
-            status: 200,
-            message: "ok",
-            files: {
-                url: `https://${req.get('host')}/api/e621/static/file/${posts[0].id}`,
-                width: posts[0].file.width,
-                height: posts[0].file.height,
-                size: posts[0].file.size
+        let { posts } = await result.json();
+        if(posts.length == 0){
+            data = {
+                ok: false,
+                status: 404,
+                statusText: "no post",
+                data: {}
+            }
+        } else {
+            data = {
+                ok: true,
+                status: 200,
+                statusText: result.statusText,
+                data: {
+                    url: `https://${req.get('host')}/api/e621/static/file/${posts[0].id}`,
+                    width: posts[0].file.width,
+                    height: posts[0].file.height,
+                    size: posts[0].file.size
+                }
             }
         }
     }
     
-    res.send(url_final)
+    res.send(data)
 })
 
 e6_app.get("/static/file/:id", async(req, res, next) => {
-    let data = await fetch(maker_url([`id:${req.params.id}`]), data9);
-    let { posts } = await data.json();
+    let data = await fetch(maker_url([`id:${req.params.id}`]), header);
 
-    let url = posts[0].file.url
-    //console.log(req.get('host'));
-  request({
-    url: url,
-    encoding: null
-  }, 
-  (err, resp, buffer) => {
-    if (!err && resp.statusCode === 200){
-      res.set("Content-Type", resp.headers['content-type']);
-      res.send(resp.body);
+    if(!data.ok){
+        request({ url: `https://http.cat/${data.status}`, encoding: null }, (err, resp, buffer) => {
+            if (!err && resp.statusCode === 200){
+                res.set("Content-Type", resp.headers['content-type']);
+                res.send(resp.body);
+            }
+        });
+    } else {
+        let { posts } = await data.json();
+        let url = posts[0].file.url;
+
+        request({ url: url, encoding: null }, (err, resp, buffer) => {
+            if (!err && resp.statusCode === 200){
+                res.set("Content-Type", resp.headers['content-type']);
+                res.send(resp.body);
+            }
+        });
     }
-  });
-})
+});
 
 module.exports = e6_app

@@ -48,7 +48,7 @@ app1.get("/sfw/:tag", async function(req, res){
             tags: datajson.tags
         })
     } else {
-        return res.send(await neko.sfw[tags]())
+        return res.send(await neko[tags]())
     }
 });
 
