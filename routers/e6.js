@@ -94,10 +94,8 @@ e6_app.get("/static/file/:id", async(req, res, next) => {
 
     if(!data.ok){
         request({ url: `https://http.cat/${data.status}`, encoding: null }, (err, resp, buffer) => {
-            if (!err && resp.statusCode === 200){
-                res.set("Content-Type", resp.headers['content-type']);
-                res.send(resp.body);
-            }
+            res.set("Content-Type", resp.headers['content-type']);
+            res.send(resp.body);
         });
     } else {
         let { posts } = await data.json();
