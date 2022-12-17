@@ -47,9 +47,40 @@ e6_app.post("/posts", async(req, res, next) => {
             data: await result.json()
         }
     }
-    
+    //https://e621.net/tags/autocomplete.json?search[name_matches]=webm+meesh
     res.send(data);
-})
+});
+
+e6_app.post("/autocomplete", async(req, res, next) => {
+    let chunks = (req.body.tags).split(' ');
+    let search = chunks.pop();
+    
+    let q = new URLSearchParams({
+        'search[name_matches]': search,
+        expiry: '7'
+    });
+    let result = await fetch(`https://e621.net/tags/autocomplete.json?${q.toString()}`, header);
+    
+    let data
+    if(!result.ok){
+        data = {
+            ok: false,
+            status: result.status,
+            statusText: result.statusText,
+            data: {}
+        }
+    } else {
+        let json_ = await result.json()
+        data = {
+            ok: true,
+            status: result.status,
+            statusText: result.statusText,
+            data: json_.map((x) => Object({ name: `${chunks.join(' ')} ${x.name}`.trim(), value: `${chunks.join(' ')} ${x.name}`.trim() }))
+        }
+    }
+    //https://e621.net/tags/autocomplete.json?search[name_matches]=webm+meesh
+    res.send(data);
+});
 
 e6_app.get("/image/:id", async(req, res, next) => {
     let result = await fetch(maker_url([`id:${req.params.id}`]), header);
@@ -97,6 +128,13 @@ e6_app.get("/static/file/:id", async(req, res, next) => {
             res.set("Content-Type", resp.headers['content-type']);
             res.send(resp.body);
         });
+    } else if((await data.json().posts).length == 0){
+        request({ url: "https://http.cat/404", encoding: null }, (err, resp, buffer) => {
+            if (!err && resp.statusCode === 200){
+                res.set("Content-Type", resp.headers['content-type']);
+                res.send(resp.body);
+            }
+        });
     } else {
         let { posts } = await data.json();
         let url = posts[0].file.url;
@@ -111,3 +149,4 @@ e6_app.get("/static/file/:id", async(req, res, next) => {
 });
 
 module.exports = e6_app
+//await data.json()
