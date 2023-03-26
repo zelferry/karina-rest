@@ -9,6 +9,7 @@ app.use(bodyParser.json())
 
 app.use("/api/nekos", require("./routers/nekos.js"));
 app.use("/api/e621", require("./routers/e6.js"));
+app.use("/api/e926", require("./routers/e9.js"));
 //pp.use("/api/ai", require("./routers/ai.js"));
  
 app.all("/", (req,res,next) => {
