@@ -56,7 +56,7 @@ kofi_app.post("/", async(req, res, next) => {
                 
                 let mailOptions = {
                     from: process.env.GMAIL_USER,
-                    to: 'zelferrybrburryoficial@gmail.com'/*obj.email*/,
+                    to: obj.email,
                     subject: 'key de vip-user comprada',
                     html: ejs({
                         keys_: keys.map((x) => {
