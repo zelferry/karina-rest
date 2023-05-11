@@ -14,10 +14,15 @@
   "devDependencies": {},
   "dependencies": {
     "body-parser": "^1.20.0",
+    "colors": "^1.4.0",
+    "ejs": "^3.1.9",
     "express": "^4.17.2",
     "http": "0.0.1-security",
+    "mongoose": "^5.13.6",
     "nekos.life": "^3.0.0",
     "node-fetch": "^2.6.1",
-    "request": "^2.88.2"
+    "nodemailer": "^6.9.1",
+    "request": "^2.88.2",
+    "uuid": "^9.0.0"
   }
 }

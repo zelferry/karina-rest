@@ -23,7 +23,7 @@ let header = {
     method: "GET",
     headers: {
         "User-Agent": "karinaTwo/4.0.2 (by jonny9075549t2)",
-        Authorization: auth(process.env.USER, process.env.PASS)
+        Authorization: auth(process.env.E6_USER, process.env.E6_PASS)
     }
 }
 

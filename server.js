@@ -1,13 +1,15 @@
 let express = require('express');
 let app = express();
+
 let http = require('http');
-let bodyParser = require('body-parser')
+let bodyParser = require('body-parser');
+let dbconnect = require("./mongo_db/connect.js");
 
-
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use("/api/nekos", require("./routers/nekos.js"));
+app.use("/api/kofi", require("./routers/kofi.js"))
 app.use("/api/e621", require("./routers/e6.js"));
 app.use("/api/e926", require("./routers/e9.js"));
 //pp.use("/api/ai", require("./routers/ai.js"));
@@ -18,17 +20,17 @@ app.all("/", (req,res,next) => {
         send: false,
         status: "???"
     });
-})
+});
 
 app.get("/api", (req, res, next) => {
     let json1 = JSON.stringify(require("./files_json/api_info.json"))
     res.send(json1)
-})
+});
 
 app.get("/ping", (req,res) => {
     console.log(`[ ${Date.now()} ] ping recebido`)
     res.sendStatus(200)
-})
+});
 
 app.use(function(err, req, res, next){
   res.status(err.status || 500);
@@ -46,7 +48,7 @@ app.use(function(req, res){
       error: "Sorry, can't find that",
       send: false,
       status: 404
-  })
+  });
 });
 
 function normalizePort(val) {
@@ -62,7 +64,8 @@ function normalizePort(val) {
 
   return false;
 }
-    
+
+dbconnect("servidor");
 app.listen(normalizePort(process.env.PORT || '3002'), () => {
   console.log('servidor iniciado');
 });
